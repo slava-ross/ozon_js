@@ -1,6 +1,6 @@
 import getData from "./getData"
 import renderGoods from "./renderGoods"
-import { priceFilter } from './filters'
+import { priceFilter, hotSaleFilter } from './filters'
 
 const filter = () => {
     const minInput = document.getElementById('min')
@@ -10,24 +10,25 @@ const filter = () => {
 
     minInput.addEventListener('input', () => {
         getData().then((data) => {
-            renderGoods(priceFilter(data, minInput.value, maxInput.value));
+            renderGoods(priceFilter(hotSaleFilter(data, checkboxInput.checked), minInput.value, maxInput.value))
         })
     })
 
     maxInput.addEventListener('input', () => {
         getData().then((data) => {
-            renderGoods(priceFilter(data, minInput.value, maxInput.value));
+            renderGoods(priceFilter(hotSaleFilter(data, checkboxInput.checked), minInput.value, maxInput.value))
         })
     })
 
     checkboxInput.addEventListener('change', () => {
-        console.log('Change!');
-        console.log(checkboxInput.checked);
         if (checkboxInput.checked) {
-
+            checkboxSpan.classList.add('checked')
         } else {
-
+            checkboxSpan.classList.remove('checked')
         }
+        getData().then((data) => {
+            renderGoods(priceFilter(hotSaleFilter(data, checkboxInput.checked), minInput.value, maxInput.value))
+        })
     })
 }
 
